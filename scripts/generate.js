@@ -1,6 +1,6 @@
 const fs = require('fs');
 const path = require('path');
-const marked = require('marked');
+const { marked } = require('marked');
 const frontMatter = require('front-matter');
 const hljs = require('highlight.js');
 
@@ -15,7 +15,7 @@ function convertPostToHTML(markdownPath) {
   const content = fs.readFileSync(markdownPath, 'utf8');
   const { attributes, body } = frontMatter(content);
   
-  const htmlContent = marked(body);
+  const htmlContent = marked.parse(body);
   
   const htmlTemplate = `
 <!DOCTYPE html>
