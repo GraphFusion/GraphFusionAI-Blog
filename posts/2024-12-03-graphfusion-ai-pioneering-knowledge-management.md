@@ -57,8 +57,8 @@ Your feedback, questions, and ideas are invaluable to us. Let’s build the futu
 
 Join our community to stay updated:  
 - Subscribe to our newsletter.  
-- Follow us on [LinkedIn](#), [Twitter](#), and [GitHub](#).  
-- Explore our [documentation](#) for technical details and getting started.  
+- Follow us on [LinkedIn](https://www.linkedin.com/company/graphfusion/?viewAsMember=true), [Twitter](#), and [GitHub](https://github.com/GraphFusion).  
+- Explore our [documentation](https://github.com/GraphFusion/GraphFusion-NMN/blob/main/documentation.md) for technical details and getting started.  
 
 ---
 
