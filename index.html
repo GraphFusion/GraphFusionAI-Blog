@@ -98,44 +98,30 @@
 
         // Fetch and display blog posts
         async function loadBlogPosts() {
-            const blogContainer = document.getElementById('blog-container');
-            try {
-                // GitHub Pages directory listing
-                const response = await fetch('blog/');
-                const text = await response.text();
-                console.log('Fetched content:', text);  // Debug logging
+    const blogContainer = document.getElementById('blog-container');
+    
+    // Directly use known blog post filename
+    const blogPostPath = 'blog/2024-12-03-graphfusion-ai-pioneering-knowledge-management.html';
+    
+    try {
+        // Create blog card for the known post
+        const title = '2024-12-03 GraphFusion AI: Pioneering Knowledge Management';
+        const blogCard = `
+            <article class="blog-card bg-gray-800 p-6 rounded-lg shadow-md">
+                <h2 class="text-2xl font-bold mb-4 text-white">${title}</h2>
+                <a href="${blogPostPath}" class="text-blue-400 hover:underline">Read More</a>
+            </article>
+        `;
+        blogContainer.innerHTML = blogCard;
+    } catch (error) {
+        console.error('Error loading blog posts:', error);
+        blogContainer.innerHTML = '<p class="text-center text-red-500">Error loading blog posts.</p>';
+    }
+}
 
-                const parser = new DOMParser();
-                const doc = parser.parseFromString(text, 'text/html');
-                const links = [...doc.querySelectorAll('a')].filter(link => 
-                    link.href.includes('.html') && !link.href.includes('index.html')
-                );
+// Call the function when page loads
+document.addEventListener('DOMContentLoaded', loadBlogPosts);
 
-                console.log('Found links:', links);  // Debug logging
-
-                if (links.length === 0) {
-                    blogContainer.innerHTML = '<p class="text-center text-gray-400">No blog posts available.</p>';
-                    return;
-                }
-
-                links.forEach(link => {
-                    const title = decodeURIComponent(link.href.split('/').pop().replace('.html', '').replace(/-/g, ' '));
-                    const blogCard = `
-                        <article class="blog-card bg-gray-800 p-6 rounded-lg shadow-md">
-                            <h2 class="text-2xl font-bold mb-4 text-white">${title}</h2>
-                            <a href="${link.href}" class="text-blue-400 hover:underline">Read More</a>
-                        </article>
-                    `;
-                    blogContainer.innerHTML += blogCard;
-                });
-            } catch (error) {
-                console.error('Error loading blog posts:', error);
-                blogContainer.innerHTML = '<p class="text-center text-red-500">Error loading blog posts.</p>';
-            }
-        }
-
-        // Call the function when page loads
-        document.addEventListener('DOMContentLoaded', loadBlogPosts);
     </script>
 </body>
 </html>
