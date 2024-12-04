@@ -1,0 +1,20 @@
+name: Deploy Blog Posts
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'blog/*.html'  # Trigger only when HTML files in the blog directory change
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Deploy to GitHub Pages
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./blog
+        keep_files: true  # Preserve existing files in the gh-pages branch
