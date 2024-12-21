@@ -98,6 +98,105 @@
 
         // Fetch and display blog posts
         async function loadBlogPosts() {
+    const blogContainer = document.getElementById('blog-container');
+    
+    try {
+        // GitHub Pages repository details
+        const username = 'kiplangatkorir';  // Your GitHub username
+        const repo = 'blog.graphfusionai.github.io';  // Your repository name
+        const branch = 'main';  // or 'gh-pages' depending on where your blog posts are stored
+
+        // GitHub API to list repository contents
+        const apiUrl = `https://api.github.com/repos/${username}/${repo}/contents/blog?ref=${branch}`;
+        
+        const response = await fetch(apiUrl);
+        const files = await response.json();
+
+        // Handle any errors from the API
+        if (files.message && files.message === 'Not Found') {
+            blogContainer.innerHTML = '<p class="text-center text-red-500">Blog directory not found in the repository.</p>';
+            return;
+        }
+
+        // Filter for HTML files
+        const blogPosts = files.filter(file => 
+            file.type === 'file' && file.name.endsWith('.html')
+        );
+
+        if (blogPosts.length === 0) {
+            blogContainer.innerHTML = '<p class="text-center text-gray-400">No blog posts available.</p>';
+            return;
+        }
+
+        // Create blog cards
+        blogPosts.forEach(post => {
+            const title = post.name.replace('.html', '').replace(/-/g, ' ');  // Title formatting
+            const blogCard = `
+                <article class="blog-card bg-gray-800 p-6 rounded-lg shadow-md">
+                    <h2 class="text-2xl font-bold mb-4 text-white">${title}</h2>
+                    <a href="/blog/${post.name}" class="text-blue-400 hover:underline">Read More</a>
+                </article>
+            `;
+            blogContainer.innerHTML += blogCard;
+        });
+    } catch (error) {
+        console.error('Error loading blog posts:', error);
+        blogContainer.innerHTML = '<p class="text-center text-red-500">Error loading blog posts.</p>';
+    }
+}
+
+// Call the function when the page loads
+document.addEventListener('DOMContentLoaded', loadBlogPosts);
+
+async function uploadBlogPost(title, content) {
+    const username = 'kiplangatkorir';
+    const repo = 'blog.graphfusionai.github.io';
+    const token = 'YOUR_GITHUB_TOKEN'; // Replace with your GitHub token
+    
+    try {
+        // Format the filename: convert to lowercase, replace spaces with hyphens
+        const filename = `${title.toLowerCase().replace(/\s+/g, '-')}.html`;
+        const path = `blog/${filename}`;
+        
+        // Create blog post HTML with matching style to your site
+        const blogPostHTML = `
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>${title} - GraphFusion AI</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <style>
+        .gradient-text {
+            background: linear-gradient(to right, #6ee7b7, #3b82f6);
+            -webkit-background-clip: text;
+            color: transparent;
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-white font-sans">
+    <div class="container mx-auto px-4 py-8 max-w-4xl">
+        <nav class="mb-8">
+            <a href="/" class="text-blue-400 hover:underline">← Back to Blog</a>
+        </nav>
+        
+        <article>
+            <h1 class="text-4xl font-bold mb-6 gradient-text">${title}</h1>
+            <div class="prose prose-invert max-w-none">
+                ${content}
+            </div>
+        </article>
+        
+        <footer class="mt-12 pt-8 border-t border-gray-800 text-gray-400 text-center">
+            <p>&copy; ${new Date().getFullYear()} GraphFusion AI Blog. All rights reserved.</p>
+        </footer>
+    </div>
+</body>
+</html>`;
+
+        // Fetch and display blog posts
+        async function loadBlogPosts() {
             const blogContainer = document.getElementById('blog-container');
             
             try {
@@ -148,5 +247,7 @@
         // Call the function when the page loads
         document.addEventListener('DOMContentLoaded', loadBlogPosts);
     </script>
+</body>
+</html>
 </body>
 </html>
