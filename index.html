@@ -30,7 +30,7 @@
 </head>
 <body class="bg-gray-900 text-white font-sans">
     <div id="particles-js"></div>
-    
+
     <div class="relative container mx-auto px-4 min-h-screen">
         <header class="text-center py-12">
             <h1 class="text-5xl font-bold mb-4 gradient-text">GraphFusion AI Blog</h1>
@@ -42,7 +42,7 @@
         <main class="grid md:grid-cols-3 gap-8" id="blog-container">
             <!-- Blog posts will be dynamically loaded here -->
         </main>
-        
+
         <section class="text-center mt-12">
             <h3 class="text-3xl font-semibold mb-6 text-white">
                 Stay Updated with GraphFusion AI
@@ -105,29 +105,24 @@
         const username = 'kiplangatkorir';  // Your GitHub username
         const repo = 'blog.graphfusionai.github.io';  // Your repository name
         const branch = 'main';  // or 'gh-pages' depending on where your blog posts are stored
-
         // GitHub API to list repository contents
         const apiUrl = `https://api.github.com/repos/${username}/${repo}/contents/blog?ref=${branch}`;
         
         const response = await fetch(apiUrl);
         const files = await response.json();
-
         // Handle any errors from the API
         if (files.message && files.message === 'Not Found') {
             blogContainer.innerHTML = '<p class="text-center text-red-500">Blog directory not found in the repository.</p>';
             return;
         }
-
         // Filter for HTML files
         const blogPosts = files.filter(file => 
             file.type === 'file' && file.name.endsWith('.html')
         );
-
         if (blogPosts.length === 0) {
             blogContainer.innerHTML = '<p class="text-center text-gray-400">No blog posts available.</p>';
             return;
         }
-
         // Create blog cards
         blogPosts.forEach(post => {
             const title = post.name.replace('.html', '').replace(/-/g, ' ');  // Title formatting
@@ -144,10 +139,8 @@
         blogContainer.innerHTML = '<p class="text-center text-red-500">Error loading blog posts.</p>';
     }
 }
-
 // Call the function when the page loads
 document.addEventListener('DOMContentLoaded', loadBlogPosts);
-
 async function uploadBlogPost(title, content) {
     const username = 'kiplangatkorir';
     const repo = 'blog.graphfusionai.github.io';
@@ -194,3 +187,58 @@ async function uploadBlogPost(title, content) {
     </div>
 </body>
 </html>`;
+        // Fetch and display blog posts
+        async function loadBlogPosts() {
+            const blogContainer = document.getElementById('blog-container');
+
+            try {
+                // GitHub Pages repository details
+                const username = 'kiplangatkorir';  // Your GitHub username
+                const repo = 'blog.graphfusionai.github.io';  // Your repository name
+                const branch = 'main';  // or 'gh-pages' depending on where your blog posts are stored
+
+                // GitHub API to list repository contents
+                const apiUrl = `https://api.github.com/repos/${username}/${repo}/contents/blog?ref=${branch}`;
+
+                const response = await fetch(apiUrl);
+                const files = await response.json();
+
+                // Handle any errors from the API
+                if (files.message && files.message === 'Not Found') {
+                    blogContainer.innerHTML = '<p class="text-center text-red-500">Blog directory not found in the repository.</p>';
+                    return;
+                }
+
+                // Filter for HTML files
+                const blogPosts = files.filter(file => 
+                    file.type === 'file' && file.name.endsWith('.html')
+                );
+
+                if (blogPosts.length === 0) {
+                    blogContainer.innerHTML = '<p class="text-center text-gray-400">No blog posts available.</p>';
+                    return;
+                }
+
+                // Create blog cards
+                blogPosts.forEach(post => {
+                    const title = post.name.replace('.html', '').replace(/-/g, ' ');  // Title formatting
+                    const blogCard = `
+                        <article class="blog-card bg-gray-800 p-6 rounded-lg shadow-md">
+                            <h2 class="text-2xl font-bold mb-4 text-white">${title}</h2>
+                            <a href="/blog/${post.name}" class="text-blue-400 hover:underline">Read More</a>
+                        </article>
+                    `;
+                    blogContainer.innerHTML += blogCard;
+                });
+            } catch (error) {
+                console.error('Error loading blog posts:', error);
+                blogContainer.innerHTML = '<p class="text-center text-red-500">Error loading blog posts.</p>';
+            }
+        }
+
+        // Call the function when the page loads
+        document.addEventListener('DOMContentLoaded', loadBlogPosts);
+    </script>
+</body>
+</html>
+</body>
